@@ -9,6 +9,14 @@ Please refer to the documentation of the respective repositories for details.
 
 === Build
 
+==== Checkout
+
+[source, shell]
+----
+$ git checkout <branch>
+$ git submodule update --init --recursive
+----
+
 ==== Configure local.mk
 
 [source, shell]
