@@ -1,1 +1,35 @@
 == Build gRPC for ZIGEN development
+
+This repository is used by ZIGEN projects such as 
+https://github.com/zigen-project/zen-remote[zen-remote]
+and
+https://github.com/zigen-project/zen-oculus-display-system[zen-oculus-remote-system]
+to use gRPC. +
+Please refer to the documentation of the respective repositories for details.
+
+=== Build
+
+==== Configure local.mk
+
+[source, shell]
+----
+$ cp local.sample.mk local.mk
+$ vim local.mk
+----
+
+==== Build
+
+[source, shell]
+----
+$ make
+----
+
+=== Release Build
+
+Build with `BUILD_TYPE` environment environment set to `Release`
+
+[source, shell]
+----
+$ BUILD_TYPE=Release make
+----
+
