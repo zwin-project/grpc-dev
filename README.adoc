@@ -19,6 +19,9 @@ $ git submodule update --init --recursive
 
 ==== Configure local.mk
 
+See https://github.com/zigen-project/zen-oculus-display-system[zen-oculus-display-system]
+for the NDK version to be specified
+
 [source, shell]
 ----
 $ cp local.sample.mk local.mk
