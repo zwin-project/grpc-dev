@@ -6,25 +6,38 @@ on:
 jobs:
   release:
     runs-on: ubuntu-22.04
+    steps:
+      - name: Create Draft Release
+        id: create_release
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: draft
+          release_name: Release Draft
+          draft: true
+          prerelease: true
+    outputs:
+      upload_url: ${{ steps.create_release.outputs.upload_url }}
+
+  build:
+    runs-on: ubuntu-22.04
+    needs: release
 
     env:
       CC: clang
       CXX: clang++
+      NDK_VERSION: 25.1.8937393
+    
+    strategy:
+      matrix:
+        build_type: [Debug, RelWithDebInfo]
 
     steps:
       - name: Install dependencies
         run: |
-          sudo apt-get update &&
+          sudo apt-get update
           sudo apt-get install meson
-
-      - name: Set version
-        id: version
-        run: |
-          REPOSITORY=$(echo ${{ github.repository }} | sed -e "s#.*/##")
-          VERSION=$(echo ${{ github.ref }} | sed -e "s#refs/tags/##g")
-          echo ::set-output name=version::$VERSION
-          echo ::set-output name=filename::$REPOSITORY-$VERSION
-          echo "Version $VERSION"
 
       - name: Checkout
         uses: actions/checkout@v2
@@ -32,26 +45,16 @@ jobs:
           submodules: recursive
 
       - name: Build
+        env:
+          BUILD_TYPE: ${{ matrix.build_type }}
         run: |
-          touch local.mk
-          make native
+          echo "ndk_version := $NDK_VERSION" > local.mk
+          echo "ndk_dir     := /usr/local/lib/android/sdk/ndk/$NDK_VERSION" >> local.mk
+          make
       
       - name: Archive
         run: |
-          export ZIP_FILE=${{ steps.version.outputs.filename }}-github-host.zip
-          mkdir -p $(dirname $ZIP_FILE)
-          zip -r $ZIP_FILE ./native/Debug/
-
-      - name: Create Release
-        id: create_release
-        uses: actions/create-release@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          tag_name: ${{ github.ref }}
-          release_name: Release ${{ github.ref }}
-          draft: true
-          prerelease: false
+          zip -r ${{ matrix.build_type }}.zip ./android ./native
 
       - name: Upload Release Asset
         id: upload-release-asset 
@@ -59,7 +62,7 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: ./${{ steps.version.outputs.filename }}-github-host.zip
-          asset_name: ${{ steps.version.outputs.filename }}-github-host.zip
+          upload_url: ${{ needs.release.outputs.upload_url }}
+          asset_path: ${{ matrix.build_type }}.zip
+          asset_name: grpc-dev-${{ matrix.build_type }}.zip
           asset_content_type: application/zip
