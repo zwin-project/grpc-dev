@@ -1,15 +1,15 @@
-== Build gRPC for ZIGEN development
+= gRPC built for Zwin development
 
-This repository is used by ZIGEN projects such as 
-https://github.com/zigen-project/zen-remote[zen-remote]
+This repository is used by Zwin projects such as 
+https://github.com/zwin-project/zen-remote[zen-remote]
 and
-https://github.com/zigen-project/zen-oculus-display-system[zen-oculus-remote-system]
+https://github.com/zwin-project/zen-mirror[zen-mirror]
 to use gRPC. +
 Please refer to the documentation of the respective repositories for details.
 
-=== Build
+== Build
 
-==== Checkout
+=== Checkout
 
 [source, shell]
 ----
@@ -17,9 +17,9 @@ $ git checkout <branch>
 $ git submodule update --init --recursive
 ----
 
-==== Configure local.mk
+=== Configure local.mk
 
-See https://github.com/zigen-project/zen-oculus-display-system[zen-oculus-display-system]
+See https://github.com/zwin-project/zen-mirror[zen-mirror]
 for the NDK version and directory to be specified
 
 [source, shell]
@@ -28,16 +28,23 @@ $ cp local.sample.mk local.mk
 $ vim local.mk
 ----
 
-==== Build
+=== Build
 
+Build for both Android and host OS.
 [source, shell]
 ----
 $ make
 ----
 
-=== Release Build
+Build for only host OS.
+[source, shell]
+----
+$ make native
+----
 
-Build with `BUILD_TYPE` environment environment set to `Release`
+== Release Build
+
+Build with `BUILD_TYPE` environment variable set to `Release`
 
 [source, shell]
 ----
