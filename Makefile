@@ -26,9 +26,11 @@ android_24_arm64-v8a: ${grpc_with_submodules} \
 											${protoc_executable}
 	cmake \
 		-B build/android/24/arm64-v8a/${ndk_version}/${BUILD_TYPE} \
+		-DCMAKE_POLICY_VERSION_MINIMUM=3.5 \
+		-DCMAKE_CXX_FLAGS="-include cstdint -Wno-missing-template-arg-list-after-template-kw"
 		-DCMAKE_INSTALL_PREFIX=${mkfile_dir}android/24/arm64-v8a/${ndk_version}/${BUILD_TYPE} \
 		-DCMAKE_BUILD_TYPE=${BUILD_TYPE} \
-	  -DCMAKE_TOOLCHAIN_FILE=${ndk_dir}/build/cmake/android.toolchain.cmake \
+		-DCMAKE_TOOLCHAIN_FILE=${ndk_dir}/build/cmake/android.toolchain.cmake \
 		-DANDROID_ABI=arm64-v8a \
 		-DANDROID_PLATFORM=android-24 \
 		-D_gRPC_CPP_PLUGIN=${grpc_cpp_plugin_executable} \
@@ -46,6 +48,8 @@ ${protoc_executable}: native
 native: ${grpc_with_submodules}
 	cmake \
 		-B build/native/${BUILD_TYPE} \
+		-DCMAKE_POLICY_VERSION_MINIMUM=3.5 \
+		-DCMAKE_CXX_FLAGS="-include cstdint -Wno-missing-template-arg-list-after-template-kw"
 		-DCMAKE_INSTALL_PREFIX=${mkfile_dir}native/${BUILD_TYPE} \
 		-DCMAKE_BUILD_TYPE=${BUILD_TYPE} \
 		-GNinja \
