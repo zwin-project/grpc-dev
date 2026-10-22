@@ -27,7 +27,7 @@ android_24_arm64-v8a: ${grpc_with_submodules} \
 	cmake \
 		-B build/android/24/arm64-v8a/${ndk_version}/${BUILD_TYPE} \
 		-DCMAKE_POLICY_VERSION_MINIMUM=3.5 \
-		-DCMAKE_CXX_FLAGS="-include cstdint -Wno-missing-template-arg-list-after-template-kw"
+		-DCMAKE_CXX_FLAGS="-include cstdint -Wno-missing-template-arg-list-after-template-kw" \
 		-DCMAKE_INSTALL_PREFIX=${mkfile_dir}android/24/arm64-v8a/${ndk_version}/${BUILD_TYPE} \
 		-DCMAKE_BUILD_TYPE=${BUILD_TYPE} \
 		-DCMAKE_TOOLCHAIN_FILE=${ndk_dir}/build/cmake/android.toolchain.cmake \
@@ -49,7 +49,7 @@ native: ${grpc_with_submodules}
 	cmake \
 		-B build/native/${BUILD_TYPE} \
 		-DCMAKE_POLICY_VERSION_MINIMUM=3.5 \
-		-DCMAKE_CXX_FLAGS="-include cstdint -Wno-missing-template-arg-list-after-template-kw"
+		-DCMAKE_CXX_FLAGS="-include cstdint -Wno-missing-template-arg-list-after-template-kw" \
 		-DCMAKE_INSTALL_PREFIX=${mkfile_dir}native/${BUILD_TYPE} \
 		-DCMAKE_BUILD_TYPE=${BUILD_TYPE} \
 		-GNinja \
